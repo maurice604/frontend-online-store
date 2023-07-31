@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { cart, arrayProductList, reviews, countQuantity } from '../dados/cart_arrayProductList';
+import
+{ cart, arrayProductList, reviews, countQuantity }
+  from
+  '../dados/cart_arrayProductList';
 import '../style/Detail.css';
-import ShoppingCart from '../shopping-cart.svg'
+import ShoppingCart from '../shopping-cart.svg';
 
 class ProductDetails extends Component {
   constructor() {
@@ -11,7 +14,7 @@ class ProductDetails extends Component {
     this.reviewSubmit = this.reviewSubmit.bind(this);
     this.state = {
       email: '',
-      stars: 0,
+      // stars: 0,
       message: '',
       reviewsState: [],
       countQuantity: countQuantity(),
@@ -20,8 +23,8 @@ class ProductDetails extends Component {
 
   componentDidMount() {
     const { id } = this.props.match.params;
-    const reviewFilter = reviews.filter(el => el.id === id);
-    this.setState({reviewsState: reviewFilter});
+    const reviewFilter = reviews.filter((el) => el.id === id);
+    this.setState({ reviewsState: reviewFilter });
   }
 
   filterProduct() {
@@ -30,7 +33,7 @@ class ProductDetails extends Component {
   }
 
   AddCart(product) {
-    cart.push({...product, quantity: 1});
+    cart.push({ ...product, quantity: 1 });
     this.setState({ countQuantity: countQuantity() });
   }
 
@@ -41,8 +44,8 @@ class ProductDetails extends Component {
     const reviewObj = { email, message, id };
     this.setState({ email: '', message: '' });
     reviews.push(reviewObj);
-    const reviewFilter = reviews.filter(el => el.id === id);
-    this.setState({reviewsState: reviewFilter});
+    const reviewFilter = reviews.filter((el) => el.id === id);
+    this.setState({ reviewsState: reviewFilter });
   }
 
   render() {
@@ -50,49 +53,64 @@ class ProductDetails extends Component {
     const { title, thumbnail, price, id, shipping } = product;
     return (
       <section className="detailPage">
-        <Link data-testid="shopping-cart-button" to="/cart"> 
-          <img src={ShoppingCart} width="30"/>
-          <span className="cart-count" data-testid="shopping-cart-size">{this.state.countQuantity}</span>
+        <Link data-testid="shopping-cart-button" to="/cart">
+          <img src={ ShoppingCart } width="30" alt="" />
+          <span
+            className="cart-count"
+            data-testid="shopping-cart-size"
+          >
+            {this.state.countQuantity}
+          </span>
         </Link>
         <div className="cart-detail">
-          <section key={id} className="cart">
+          <section key={ id } className="cart">
             <h1 data-testid="product-detail-name">{title}</h1>
-            <img src={thumbnail} className="image"/>
+            <img src={ thumbnail } className="image" alt="" />
             <span>{`R$${price}`}</span>
             {
               (shipping.free_shipping)
-              ? <span data-testid="free-shipping">Frete Grátis</span>
-              : ''
+                ? <span data-testid="free-shipping">Frete Grátis</span>
+                : ''
             }
           </section>
           <button
             type="button"
-            onClick={() => this.AddCart(product)}
+            onClick={ () => this.AddCart(product) }
             data-testid="product-detail-add-to-cart"
             className="product-button"
-          >Adicionar ao cart</button>
+          >
+            Adicionar ao cart
+          </button>
         </div>
         <form className="review">
           <h2>Avaliações</h2>
-          <input type="text"  onChange={({ target }) => {this.setState({email: target.value})}} value={this.state.email} placeholder="Email" className="inputEmail"/>
-          <br></br><textarea
+          <input
+            type="text"
+            onChange={ ({ target }) => { this.setState({ email: target.value }); } }
+            value={ this.state.email }
+            placeholder="Email"
+            className="inputEmail"
+          />
+          <br />
+          <textarea
             data-testid="product-detail-evaluation"
-            onChange={({ target }) => {this.setState({message: target.value})}}
-            value={this.state.message}
+            onChange={ ({ target }) => { this.setState({ message: target.value }); } }
+            value={ this.state.message }
             placeholder="Mensagem(opcional)"
             className="inputEmail"
-          /><br></br>
-          <button type="button" onClick={this.reviewSubmit}>Avaliar</button>
+          />
+          <br />
+          <button type="button" onClick={ this.reviewSubmit }>Avaliar</button>
         </form>
         {
           (this.state.reviewsState.length !== 0)
-          ? this.state.reviewsState.map((review, index) => (
-            <div key={index}>
-              <p>{review.email}</p>
-              <p>{review.message}</p>
-            </div>
-          ))
-          : <h1>Produto sem avaliações...</h1>
+            ? this.state.reviewsState.map((review, index) => (
+              <div key={ index }>
+                <p>{review.email}</p>
+                <p>{review.message}</p>
+              </div>
+            ))
+            : <h1>Produto sem avaliações...</h1>
         }
       </section>
     );
